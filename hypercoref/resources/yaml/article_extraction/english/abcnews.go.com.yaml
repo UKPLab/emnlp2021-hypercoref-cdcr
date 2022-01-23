@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_abcnews.go.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/abcnews.go.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "abcnews.go.com"

@@ -1,0 +1,23 @@
+global:
+  logging:
+    level_console: DEBUG
+    level_file: DEBUG
+
+  device_name: "slurm"
+
+  working_dir: "..."
+
+corenlp:
+  corenlp_home: "/.../stanford-corenlp-full-2018-10-05"
+
+  # these kwargs are passed to the constructor of stanfordnlp.server.client.CoreNLPClient
+  corenlp_kwargs:
+#    # use local CoreNLP...
+#    annotators: "tokenize,ssplit,pos,lemma,depparse"
+
+    # ...or use a remote CoreNLP server
+    start_server: False
+    endpoint: "http://your-node-name:9000"
+
+  # number of threads on the remote server specified above
+  server_threads: 128

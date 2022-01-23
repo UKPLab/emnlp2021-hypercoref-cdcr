@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_technologyreview.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/technologyreview.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "technologyreview.com"

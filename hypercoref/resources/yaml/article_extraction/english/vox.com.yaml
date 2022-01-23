@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_vox.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/vox.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "vox.com"

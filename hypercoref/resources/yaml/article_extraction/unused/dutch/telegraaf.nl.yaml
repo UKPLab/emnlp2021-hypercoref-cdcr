@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_telegraaf.nl
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/telegraaf.nl"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "telegraaf.nl"

@@ -1,0 +1,15 @@
+global:
+  config_name: article_extraction_foxnews.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/foxnews.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "foxbusiness.com"
+        - "foxnews.com"
+        - "foxsports.com"

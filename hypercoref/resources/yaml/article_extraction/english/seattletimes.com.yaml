@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_seattletimes.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/seattletimes.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "seattletimes.com"

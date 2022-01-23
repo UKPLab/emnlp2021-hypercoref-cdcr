@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_deadspin.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/deadspin.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "deadspin.com"

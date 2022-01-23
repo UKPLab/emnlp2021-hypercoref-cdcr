@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_theepochtimes.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/theepochtimes.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "theepochtimes.com"

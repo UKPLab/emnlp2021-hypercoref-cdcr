@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_metro.us
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/metro.us.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "metro.us"

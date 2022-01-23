@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_cnbc.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/cnbc.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "cnbc.com"

@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  pipeline:
+    image: mbugert/hypercoref-pipeline
+#    build:
+#      context: .
+#      dockerfile: pipeline.Dockerfile
+    container_name: hypercoref-pipeline
+    env_file:
+      - .env
+    volumes:
+      - ${HOST_WORKING_DIR}/:/hypercoref/working_dir
+    stdin_open: true
+    tty: true
+    depends_on:
+      - corenlp
+    networks:
+      - hypercoref
+
+  corenlp:
+    build:
+      context: .
+      dockerfile: corenlp.Dockerfile
+    container_name: hypercoref-corenlp
+    networks:
+      - hypercoref
+
+networks:
+  hypercoref:

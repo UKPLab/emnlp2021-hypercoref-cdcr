@@ -1,0 +1,28 @@
+global:
+  logging:
+    level_console: DEBUG
+    level_file: DEBUG
+
+  device_name: "docker"
+  # optionally specify number of logical cores
+  # max_cores: 999
+
+  working_dir: "working_dir"
+
+corenlp:
+  # not used when using remote CoreNLP
+  #corenlp_home: "/opt/stanford-corenlp-full-2018-10-05"
+
+  # number of threads on the remote CoreNLP server (assuming it is configured below)
+  server_threads: 4
+
+  # these kwargs are passed to the constructor of stanfordnlp.server.client.CoreNLPClient
+  corenlp_kwargs:
+    # ----------- local CoreNLP -----------
+    # annotators: "tokenize,ssplit,pos,lemma,depparse"
+    # # note: one local CoreNLP instance will be spawned per logical CPU core, so don't set the number of threads too high here
+    # threads: 2
+
+    # ----------- remote CoreNLP server -----------
+    start_server: False
+    endpoint: "http://hypercoref-corenlp:9000"

@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_mirror.co.uk
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/mirror.co.uk.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "mirror.co.uk"

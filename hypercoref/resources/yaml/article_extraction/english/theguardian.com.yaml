@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_theguardian.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/theguardian.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "theguardian.com"

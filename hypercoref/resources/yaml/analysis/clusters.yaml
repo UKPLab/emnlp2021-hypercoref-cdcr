@@ -1,0 +1,16 @@
+global:
+  config_name: manual_analysis
+
+
+pipeline:
+  stages:
+    - module: python.pipeline.common.dummy_feeder_stage
+      name: init
+    - module: python.data.pipeline.analysis.clusters
+
+  configs:
+    init:
+      files_produced:
+        page_infos: "..."
+        sentences: "..."
+        hyperlinks: "..."

@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_vanityfair.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/vanityfair.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "vanityfair.com"

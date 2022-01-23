@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_abc.net.au
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/abc.net.au"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "abc.net.au"

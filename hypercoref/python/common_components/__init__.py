@@ -1,0 +1,5 @@
+YAML = "yaml"
+CORENLP = "corenlp"
+WAYBACK_MACHINE = "wayback_machine"
+COMMON_CRAWL = "common_crawl"
+NLTK = "nltk"

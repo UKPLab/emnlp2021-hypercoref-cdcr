@@ -1,0 +1,19 @@
+global:
+  config_name: page_seeding_trial
+
+pipeline:
+  stages:
+    - module: python.data.pipeline.page_seeding
+      name: seeding
+
+  configs:
+    seeding:
+      from: 1970-01-01
+      to: 2020-11-18
+
+      news_outlets:
+
+        newrepublic:
+          site: "newrepublic"
+          promising_prefixes:
+            - "newrepublic.com/article/"

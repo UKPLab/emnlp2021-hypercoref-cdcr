@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_volkskrant.nl
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/volkskrant.nl"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "volkskrant.nl"

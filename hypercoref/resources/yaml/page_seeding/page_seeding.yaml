@@ -1,0 +1,371 @@
+global:
+  config_name: page_seeding
+
+
+pipeline:
+  stages:
+    - module: python.data.pipeline.page_seeding
+      name: seeding
+
+  configs:
+    seeding:
+      # query for articles crawled in this date range
+      from: 1970-01-01
+      to: 2020-11-18
+
+      news_outlets:
+        # ----------- ENGLISH NEWS OUTLETS -----------
+        # sources / inspiration:
+        # - https://www.reddit.com/r/politics/comments/df7ig2/megathread_white_house_says_it_will_not_cooperate/
+
+        abcnews:
+          site: "abcnews"
+          promising_prefixes:
+            - "abcnews.go.com/"
+        apnews:
+          site: "apnews"
+          promising_prefixes:
+            - "apnews.com/"
+        avclub:
+          site: "avclub.com"
+          promising_prefixes:
+            - "avclub.com/"
+          blacklist:
+            - "http://www.avclub.com/tag/"
+            - "https://www.avclub.com/tag/"
+        bbc:
+          site: "bbc.com"
+          promising_prefixes:
+            - "bbc.com/sport/"
+            - "bbc.com/news/"
+            - "bbc.com/worklife/"
+        bleacherreport:
+          site: "bleacherreport"
+          promising_prefixes:
+            - "bleacherreport.com/articles/"
+        bostonglobe:
+          site: "bostonglobe"
+          promising_prefixes:
+            - "bostonglobe.com/news/"
+        businessinsider:
+          site: "businessinsider"
+          promising_prefixes:
+            - "businessinsider.com/"
+        cnbc:
+          site: "cnbc"
+          promising_prefixes:
+            - "cnbc.com/"
+            - "cnbc.com/amp/"
+        cnn:
+          site: "cnn"
+          promising_prefixes:
+            - "https://www.edition.cnn.com"
+        deadspin:
+          site: "deadspin.com"
+          promising_prefixes:
+            - "deadspin.com/"
+          blacklist:
+            - "http://deadspin.com/tag/"
+            - "https://deadspin.com/tag/"
+        denverpost:
+          site: "denverpost"
+          promising_prefixes:
+            - "denverpost.com/"
+        espn:
+          site: "espn"
+          promising_prefixes:
+            - "espn.com/nfl/story/"
+            - "espn.com/nba/story/"
+            - "espn.com/soccer/story/"
+            - "espn.com/racing/story/"
+            - "espn.com/rugby/story/"
+            - "espn.com/tennis/story/"
+            - "espn.com/golf/story/"
+            - "espn.com/nhl/story/"
+            - "espn.com/esports/story/"
+        f1:
+          site: "formula1.com"
+          promising_prefixes:
+            - "formula1.com/en/latest/"
+        foxnews:
+          site: "foxnews"
+          promising_prefixes:
+            - "foxbusiness.com/"
+            - "foxnews.com/politics/"
+            - "foxnews.com/us"
+            - "foxsports.com/"
+        gizmodo:
+          site: "gizmodo.com"
+          promising_prefixes:
+            - "gizmodo.com/"
+          blacklist:
+            - "http://gizmodo.com/tag/"
+            - "https://gizmodo.com/tag/"
+        huffpost:
+          site: "huffpost"
+          promising_prefixes:
+            - "huffpost.com/entry/"
+        independent:
+          site: "independent"
+          promising_prefixes:
+            - "independent.co.uk/news/"
+            - "independent.co.uk/sport/"
+        jalopnik:
+          site: "jalopnik.com"
+          promising_prefixes:
+            - "jalopnik.com/"
+          blacklist:
+            - "http://jalopnik.com/tag/"
+            - "https://jalopnik.com/tag/"
+        kotaku:
+          site: "kotaku.com"
+          promising_prefixes:
+            - "kotaku.com/"
+          blacklist:
+            - "http://www.kotaku.com/tag/"
+            - "https://www.kotaku.com/tag/"
+        lawandcrime:
+          site: "lawandcrime"
+          promising_prefixes:
+            - "lawandcrime.com/"
+        latimes:
+          site: "latimes"
+          promising_prefixes:
+            - "latimes.com/"
+        marketwatch:
+          site: "marketwatch"
+          promising_prefixes:
+            - "marketwatch.com/story/"
+        metro:
+          site: "metro"
+          promising_prefixes:
+            - "metro.us/"
+        mirror:
+          site: "mirror"
+          promising_prefixes:
+            - "mirror.co.uk/news/"
+            - "mirror.co.uk/sport/"
+        nbc:
+          site: "nbc"
+          promising_prefixes:
+            - "nbcnews.com/"
+        newrepublic:
+          site: "newrepublic"
+          promising_prefixes:
+            - "newrepublic.com/article/"
+        newsweek:
+          site: "newsweek"
+          promising_prefixes:
+            - "newsweek.com/"
+        politico:
+          site: "politico"
+          promising_prefixes:
+            - "politico.com/news/"
+        rollingstone:
+          site: "rollingstone"
+          promising_prefixes:
+            - "rollingstone.com/movies/movie-news/"
+            - "rollingstone.com/music/music-news/"
+            - "rollingstone.com/politics/politics-news/"
+            - "rollingstone.com/tv/tv-news/"
+        seattletimes:
+          site: "seattletimes"
+          promising_prefixes:
+            - "https://www.seattletimes.com/seattle-news/"
+            - "https://www.seattletimes.com/nation-world/"
+            - "https://www.seattletimes.com/business/"
+        technologyreview:
+          site: "technologyreview"
+          promising_prefixes:
+            - https://www.technologyreview.com/
+        theepochtimes:
+          site: "theepochtimes"
+          promising_prefixes:
+            - "theepochtimes.com/"
+        theguardian:
+          site: "theguardian"
+          promising_prefixes:
+            - "theguardian.com/business/"
+            - "theguardian.com/environment"
+            - "theguardian.com/football"
+            - "theguardian.com/politics/"
+            - "theguardian.com/sport"
+            - "theguardian.com/technology"
+            - "theguardian.com/uk-news"
+            - "theguardian.com/uk/business"
+            - "theguardian.com/us-news/"
+            - "theguardian.com/world/"
+        thehill:
+          site: "thehill"
+          promising_prefixes:
+            - "thehill.com/homenews/"
+        theverge:
+          site: "theverge"
+          promising_prefixes:
+            - "https://www.theverge.com/"
+        theweek:
+          site: "theweek"
+          promising_prefixes:
+            - "theweek.com/speedreads/"
+        usatoday:
+          site: "usatoday"
+          promising_prefixes:
+            - "usatoday.com/story/news/"
+        vanityfair:
+          site: "vanityfair"
+          promising_prefixes:
+            - "vanityfair.com/news/"
+        vox:
+          site: "vox"
+          promising_prefixes:
+            - "vox.com/"
+        wsj:
+          site: "wsj"
+          promising_prefixes:
+            - "wsj.com/articles"
+        washingtonpost:
+          site: "washingtonpost"
+          promising_prefixes:
+            - "washingtonpost.com/news/"
+            - "washingtonpost.com/business/"
+            - "washingtonpost.com/climate-environment/"
+            - "washingtonpost.com/politics/"
+            - "washingtonpost.com/sports/"
+            - "washingtonpost.com/world/"
+        wired:
+          site: "wired"
+          promising_prefixes:
+            - "https://www.wired.com/story/"
+
+        # ----------- GERMAN NEWS OUTLETS -----------
+#        heise_online:
+#          site: "heise.de"
+#          promising_prefixes:
+#            - "heise.de/newsticker/meldung/"
+
+        # ----------- FRENCH NEWS OUTLETS -----------
+#        le_monde:
+#          site: "lemonde.fr"
+#          promising_prefixes:
+#            - "lemonde.fr/"
+
+        # ----------- DUTCH NEWS OUTLETS -----------
+        # source on the Dutch ones: https://www.expatica.com/nl/lifestyle/culture-entertainment/dutch-newspapers-and-media-106958/
+#        nu:
+#          site: "nu"
+#          promising_prefixes:
+#            - "nu.nl"
+#        telegraaf:
+#          site: "telegraaf"
+#          promising_prefixes:
+#            - "telegraaf.nl/nieuws/"
+#            - "telegraaf.nl/sport/"
+#            - "telegraaf.nl/entertainment/"
+#            - "telegraaf.nl/financieel/"
+#        ad:
+#          site: "ad"
+#          promising_prefixes:
+#            - "ad.nl/nieuws"
+#            - "ad.nl/binnenland"
+#            - "ad.nl/buitenland"
+#            - "ad.nl/politiek/"
+#            - "ad.nl/economie/"
+#            - "ad.nl/sport/"
+#            - "ad.nl/nederlands-voetbal/"
+#            - "ad.nl/buitenlands-voetbal/"
+#        nos:
+#          site: "nos"
+#          promising_prefixes:
+#            - "nos.nl/artikel/"
+#        rtlnieuws:
+#          site: "rtlnieuws"
+#          promising_prefixes:
+#            - "rtlnieuws.nl/nieuws/"
+#            - "rtlnieuws.nl/economie/artikel/"
+#            - "rtlnieuws.nl/sport/artikel/"
+#            - "rtlnieuws.nl/entertainment/artikel"
+#        volkskrant:
+#          site: "volkskrant"
+#          promising_prefixes:
+#            - "volkskrant.nl/nieuws-achtergrond/"
+#        nrc:
+#          site: "nrc"
+#          promising_prefixes:
+#            - "nrc.nl/nieuws/"
+#        metronieuws:
+#          site: "metronieuws"
+#          promising_prefixes:
+#            - "metronieuws.nl/in-het-nieuws/"
+
+# ----------- UNUSED ENGLISH NEWS OUTLETS -----------
+# Page seeding succeeds for these outlets, but they were not included due to issues in later pipeline stages we didn't
+# bother to optimize or fix. These are: OOM errors in the first WARC extraction stage (nytimes, reuters), OOM errors in
+# the page index simplification stage (abcnet) or IndexError in clamp_global_span_to_tokenized_spans during in the
+# second WARC extraction stage (dailymail).
+#
+#        abcnet:
+#          site: "abcnet"
+#          promising_prefixes:
+#            - "abc.net.au/news/"
+#        dailymail:
+#          site: "dailymail"
+#          promising_prefixes:
+#            - "dailymail.co.uk/news/"
+#            - "dailymail.co.uk/sport/"
+#        nytimes:
+#          site: "nytimes"
+#          promising_prefixes:
+#            - "nytimes.com/"
+#        reuters:
+#          site: "reuters"
+#          promising_prefixes:
+#            - "reuters.com/article/"
+
+# ----------- OUTLETS WHICH DIDN'T WORK WELL -----------
+
+# bloomberg also didn't work well. there weren't many articles indexed on common crawl
+#        bloomberg:
+#          site: "bloomberg.com"
+#          promising_prefixes:
+#            - "bloomberg.com/news/"
+# ZDF didn't work well. Hardly any hyperlinks between documents it seems.
+#        zdf_nachrichten:
+#          site: "zdf.de"
+#          promising_prefixes:
+#            - "zdf.de/nachrichten/"
+# CBS returned less than 500 pages
+#        cbsnews:
+#          site: "cbsnews"
+#          promising_prefixes:
+#            - "cbsnews.com/amp/live-news/"
+#            - "cbsnews.com/live-news"
+# NPR: very low turnout
+#        npr:
+#          site: "npr"
+#          promising_prefixes:
+#            - "https://www.npr.org/sections/national"
+#            - "https://www.npr.org/sections/world"
+#            - "https://www.npr.org/sections/business"
+#            - "https://www.npr.org/sections/politics"
+#            - "https://www.npr.org/sections/science"
+# WTTW: low turnout (only a few megabytes)
+#        wttw:
+#          site: "wttw"
+#          promising_prefixes:
+#            - "news.wttw.com/"
+# Telegraph: lots of error 500's with CC index, possibly not telegraph's fault but it didn't work
+#        telegraph:
+#          site: "telegraph"
+#          promising_prefixes:
+#            - "telegraph.co.uk/news/"
+#            - "telegraph.co.uk/football/"
+#            - "telegraph.co.uk/formula-1/"
+#            - "telegraph.co.uk/cricket/"
+#            - "telegraph.co.uk/business/"
+#            - "telegraph.co.uk/technology/"
+# thesun produced lots of error 500's, not sure if this is a temporary or permanent issue
+#        thesun:
+#          site: "thesun"
+#          promising_prefixes:
+#            - "thesun.co.uk/news/"
+#            - "thesun.co.uk/sport/"

@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_gizmodo.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/gizmodo.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "gizmodo.com"

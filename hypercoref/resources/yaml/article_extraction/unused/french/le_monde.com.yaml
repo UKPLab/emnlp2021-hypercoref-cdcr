@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_le-monde.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/le_monde.com"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "lemonde.fr"

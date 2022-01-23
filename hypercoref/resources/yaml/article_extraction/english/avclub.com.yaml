@@ -1,0 +1,13 @@
+global:
+  config_name: article_extraction_avclub.com
+
+pipeline:
+  configs:
+
+    init:
+      files_produced:
+        page_index: "/hypercoref/working_dir/page_seeding/avclub.com.csv"
+
+    postprocess_hyperlinks:
+      netloc_whitelist:
+        - "avclub.com"
