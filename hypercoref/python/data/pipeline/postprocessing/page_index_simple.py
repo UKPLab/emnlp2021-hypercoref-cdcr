@@ -9,7 +9,11 @@ from python.pipeline.pipeline import PipelineStage
 
 class SimplePageIndexPostProcessingStage(PipelineStage):
     """
-    This stage filters the page index based on URL blacklist/whitelist substrings.
+    Makes several smaller modifications to a page index file:
+    - Filters index based on URL blacklist/whitelist substrings.
+    - Fixes the CommonCrawl URL prefix for old indexer API results, see [1].
+
+    [1] https://commoncrawl.org/2022/03/introducing-cloudfront-access-to-common-crawl-data/
     """
 
     def __init__(self, pos, config, config_global, logger):
@@ -35,12 +39,19 @@ class SimplePageIndexPostProcessingStage(PipelineStage):
             return page_index.index.to_series().map(lambda url: any(term in url for term in s))
         blacklisted = pd.Series(True, index=page_index.index) if not self.url_substring_blacklist else contains(self.url_substring_blacklist)
         whitelisted = pd.Series(False, index=page_index.index) if not self.url_substring_whitelist else contains(self.url_substring_whitelist)
-        to_keep = ~blacklisted | whitelisted
-        page_index_filtered = page_index.loc[to_keep]
+        to_drop = blacklisted & (~whitelisted)
+        self.logger.info(f"Of {len(page_index)} pages, {(~to_drop).sum()} pages remain after filtering.")
+        page_index.drop(to_drop.index[to_drop], inplace=True)
 
-        self.logger.info(f"Of {len(page_index)} pages, {len(page_index_filtered)} pages remain after filtering ({(~to_keep).sum()} were blacklisted).")
+        # #1 fix the CommonCrawl URL prefix for old indexer API results
+        old_prefix = "https://commoncrawl.s3.amazonaws.com/"
+        current_prefix = "https://data.commoncrawl.org/"
+        has_old_prefix = page_index[FILENAME].str.startswith(old_prefix)
+        page_index.loc[has_old_prefix, FILENAME] = page_index.loc[has_old_prefix, FILENAME].map(
+            lambda url: current_prefix + url[len(old_prefix):])
+        self.logger.info(f"Fixed CommonCrawl URL prefix for {sum(has_old_prefix)} pages.")
 
-        page_index_filtered.to_csv(self.page_index_filtered_simple_file)
+        page_index.to_csv(self.page_index_filtered_simple_file)
 
 
 component = SimplePageIndexPostProcessingStage
