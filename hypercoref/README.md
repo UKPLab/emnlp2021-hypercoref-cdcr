@@ -111,3 +111,7 @@ Extracting custom data based on more recent crawls (or other languages, etc.), r
    ```
 
 > Note: Depending on the size of your page index created in step 1, completing the first `warc_extraction` pipeline stage can take several days. Also, note that the second `warc_extraction` stage will redownload all pages that made it through the content deduplication stage. There is no good reason for this, other than the code having grown historically.
+
+## Troubleshooting
+* If the pipeline fails with `illegal instruction (core dumped)` in `CreateSplitsStage`, then the pre-built [kahypar](https://github.com/kahypar/kahypar/) binaries are not compatible with your system.
+    * To fix this, [build the kahypar python module from source](https://github.com/kahypar/kahypar#the-python-interface) and try replacing the binary [in your site-packages](https://stackoverflow.com/a/46071447) installed via pip with the self-built one.

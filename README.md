@@ -39,5 +39,5 @@ https://tu-darmstadt.de
 The code base of our paper is split across three python projects:
 
 1. [hypercoref/](hypercoref/): Data pipeline for (re-)creating the HyperCoref corpus. It outputs a collection of [Apache parquet](https://parquet.apache.org/) files.
-2. 🚧🚧 tba 🚧🚧 [The "hypercoref" branch in another project of ours](https://github.com/UKPLab/cdcr-beyond-corpus-tailored/tree/hypercoref): Another data pipeline which shortens hyperlink anchor texts, and exports the data in a format friendly for CDCR systems.
+2. [The "hypercoref" branch in another project of ours](https://github.com/UKPLab/cdcr-beyond-corpus-tailored/tree/hypercoref): Another data pipeline which shortens hyperlink anchor texts, and exports the data in a format friendly for CDCR systems.
 3. 🚧🚧 tba 🚧🚧 [system/](system/): modified version of [Cattan et al. 2021's CDCR system](https://github.com/ariecattan/coref/) which can be trained/tested on corpora other than ECB+.
