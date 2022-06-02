@@ -5,7 +5,7 @@ This repository accompanies our paper *Event Coreference Data (Almost) for Free:
 
 It contains:
 - code for (re-)creating the HyperCoref corpus
-- 🚧🚧 tba 🚧🚧 the cross-document event coreference resolution (CDCR) system implementation used in our experiments, which is a modified version of [Cattan et al. 2021's system](https://github.com/ariecattan/coref/)
+- the cross-document event coreference resolution (CDCR) system implementation used in our experiments, which is a modified version of [Cattan et al. 2021's system](https://github.com/ariecattan/coref/)
 - 🚧🚧 tba 🚧🚧 [CoNLL files and scores from our experiments](archive/)
 
 Please cite our work as follows:
@@ -40,4 +40,4 @@ The code base of our paper is split across three python projects:
 
 1. [hypercoref/](hypercoref/): Data pipeline for (re-)creating the HyperCoref corpus. It outputs a collection of [Apache parquet](https://parquet.apache.org/) files.
 2. [The "hypercoref" branch in another project of ours](https://github.com/UKPLab/cdcr-beyond-corpus-tailored/tree/hypercoref): Another data pipeline which shortens hyperlink anchor texts, and exports the data in a format friendly for CDCR systems.
-3. 🚧🚧 tba 🚧🚧 [system/](system/): modified version of [Cattan et al. 2021's CDCR system](https://github.com/ariecattan/coref/) which can be trained/tested on corpora other than ECB+.
+3. [system/](system/): modified version of [Cattan et al. 2021's CDCR system](https://github.com/ariecattan/coref/) which can be trained/tested on corpora other than ECB+.
