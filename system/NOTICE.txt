@@ -1,0 +1,5 @@
+Third party legal information
+
+
+This repository includes a modified version of the MIT-licensed coreference resolution framework by Nafise Sadat Moosavi (https://github.com/ns-moosavi/coval) at `python/util/conll_scorer`.
+Modifications: we removed unused scorer parts (arrau) and adapted scorer.py for the use with pandas.

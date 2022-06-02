@@ -2,10 +2,11 @@ from itertools import compress
 import torch
 import numpy as np
 
+from corpus import Corpus
 
 
 class TopicSpans:
-    def __init__(self, config, data, topic_num, docs_embeddings=None, docs_lengths=None, is_training=True):
+    def __init__(self, config, data: Corpus, topic: str, docs_embeddings=None, docs_lengths=None, is_training=True):
         self.config = config
         self.data = data
         self.is_training = is_training
@@ -33,12 +34,12 @@ class TopicSpans:
         self.start_end_embeddings = []
         self.continuous_embeddings = []
 
-        self.get_all_spans_from_topic(data, topic_num, docs_embeddings, docs_lengths)
+        self.get_all_spans_from_topic(data, topic, docs_embeddings, docs_lengths)
         self.create_tensor()
 
 
-    def set_span_labels(self):
-        self.labels = self.data.get_candidate_labels(self.doc_ids, self.origin_start, self.origin_end)
+    def set_span_labels(self, topic: str):
+        self.labels = self.data.get_candidate_labels(topic, self.doc_ids, self.origin_start, self.origin_end)
 
 
 
@@ -85,23 +86,23 @@ class TopicSpans:
         original_candidate_starts = original_token_ids[candidate_starts]
         original_candidate_ends = original_token_ids[candidate_ends]
 
-        # Convert to BERT ids
-        bert_candidate_starts = bert_start_end[candidate_starts, 0]
-        bert_candidate_ends = bert_start_end[candidate_ends, 1]
+        # Convert to BERT ids: reshape(-1) is necessary to keep the result vector-shaped even if there is only a single
+        # candidate
+        bert_candidate_starts = bert_start_end[candidate_starts, 0].reshape(-1)
+        bert_candidate_ends = bert_start_end[candidate_ends, 1].reshape(-1)
 
         return sentence_span, (original_candidate_starts, original_candidate_ends), \
                (bert_candidate_starts, bert_candidate_ends)
 
 
 
-    def get_all_spans_from_topic(self, data, topic_num, docs_embeddings, docs_length):
+    def get_all_spans_from_topic(self, data: Corpus, topic: str, docs_embeddings, docs_length):
         # doc names may appear more than once if the doc was splitted into segments
-        doc_names = data.topics_list_of_docs[topic_num]
+        doc_names = data.list_of_docs[topic]
 
-        for i in range(len(doc_names)):
-            doc_id = doc_names[i]
-            original_tokens = data.topics_origin_tokens[topic_num][i]
-            bert_start_end = data.topics_start_end_bert[topic_num][i]
+        for i, doc_id in enumerate(doc_names):
+            original_tokens = data.origin_tokens[topic][i]
+            bert_start_end = data.start_end_bert[topic][i]
             if self.is_training:  # Filter only the validated sentences according to Cybulska setup
                 filt = [x[-1] for x in original_tokens]
                 bert_start_end = bert_start_end[filt]
@@ -111,12 +112,9 @@ class TopicSpans:
                 continue
 
             self.num_tokens += len(original_tokens)
-            sentence_span, original_candidates, bert_candidates = self.get_docs_candidate(original_tokens, bert_start_end)
-            original_candidate_starts, original_candidate_ends = original_candidates
+            sentence_span, (original_candidate_starts, original_candidate_ends), (bert_candidate_starts, bert_candidate_ends) = self.get_docs_candidate(original_tokens, bert_start_end)
 
             #token_text = np.asarray([x[2] for x in original_tokens])
-
-
 
             # update origin idx
             self.doc_ids.extend([doc_id] * len(sentence_span))
@@ -126,11 +124,9 @@ class TopicSpans:
             self.width.extend(original_candidate_ends - original_candidate_starts)
 
             # update bert idx
-            bert_candidate_starts, bert_candidate_ends = bert_candidates
             self.segment_ids.extend([i] * len(sentence_span))
             self.bert_start.extend(bert_candidate_starts)
             self.bert_end.extend(bert_candidate_ends)
-
 
             # add span embeddings
             if docs_embeddings is not None:

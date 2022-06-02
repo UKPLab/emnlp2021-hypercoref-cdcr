@@ -1,16 +1,17 @@
-from sklearn.cluster import AgglomerativeClustering
-import argparse
-import pyhocon
-from transformers import AutoTokenizer, AutoModel
-from itertools import product
 import collections
-from tqdm import tqdm
+from itertools import product
+
+import click
+import pyhocon
+from sklearn.cluster import AgglomerativeClustering
+from transformers import AutoTokenizer, AutoModel
 
 from conll import write_output_file
-from models import SpanScorer, SimplePairWiseClassifier, SpanEmbedder
-from utils import *
+from corpus import Corpus
 from model_utils import *
-
+from models import SpanScorer, SimplePairWiseClassifier, SpanEmbedder
+from train_pairwise_scorer import cli_init
+from utils import *
 
 
 def init_models(config, device, model_num):
@@ -80,16 +81,10 @@ def remove_nested_mentions(cluster_ids, doc_ids, starts, ends):
 
 
 
-
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str, default='configs/config_clustering.json')
-    args = parser.parse_args()
-
-
-    config = pyhocon.ConfigFactory.parse_file(args.config)
+@cli_init.command(help="Tune clustering parameters")
+@click.argument("config_path", type=click.Path(exists=True, dir_okay=False))
+def tune(config_path):
+    config = pyhocon.ConfigFactory.parse_file(config_path)
     print(pyhocon.HOCONConverter.convert(config, "hocon"))
     create_folder(config['save_path'])
     device = 'cuda:{}'.format(config['gpu_num'][0]) if torch.cuda.is_available() else 'cpu'
@@ -102,7 +97,7 @@ if __name__ == '__main__':
 
 
     bert_tokenizer = AutoTokenizer.from_pretrained(config['bert_model'])
-    data = create_corpus(config, bert_tokenizer, 'dev')
+    data = Corpus.create_corpus(config, bert_tokenizer, 'dev')
 
     clustering_5 = AgglomerativeClustering(n_clusters=None, affinity='precomputed', linkage=config['linkage_type'],
                                          distance_threshold=0.5)
@@ -127,17 +122,17 @@ if __name__ == '__main__':
 
         doc_ids, sentence_ids, starts, ends = [], [], [], []
 
-        for topic_num, topic in enumerate(data.topic_list):
+        for topic, _ in data.docs_by_topic.items():
             print('Processing topic {}'.format(topic))
-            docs_embeddings, docs_length = pad_and_read_bert(data.topics_bert_tokens[topic_num], bert_model)
+            docs_embeddings, docs_length = pad_and_read_bert(data.bert_tokens[topic], bert_model)
             span_meta_data, span_embeddings, num_of_tokens = get_all_candidate_from_topic(
-                config, data, topic_num, docs_embeddings, docs_length)
+                config, data, topic, docs_embeddings, docs_length)
 
             doc_id, sentence_id, start, end = span_meta_data
             start_end_embeddings, continuous_embeddings, width = span_embeddings
             width = width.to(device)
 
-            labels = data.get_candidate_labels(doc_id, start, end)
+            labels = data.get_candidate_labels(topic, doc_id, start, end)
 
             if config['use_gold_mentions']:
                 span_indices = labels.nonzero().squeeze(1)
@@ -214,9 +209,10 @@ if __name__ == '__main__':
             else:
                 new_doc_ids, new_starts, new_ends = doc_ids, starts, ends
 
+            # TODO MB: we do not remove singletons here, these can still be removed at scoring time if desired
             # removing singletons
-            all_clusters = {cluster_id:mentions for cluster_id, mentions in all_clusters.items()
-                               if len(mentions) > 1}
+            # all_clusters = {cluster_id:mentions for cluster_id, mentions in all_clusters.items()
+            #                    if len(mentions) > 1}
 
             # print('Saving conll file...')
             doc_name = 'model_{}_{}_{}_{}_{}'.format(
@@ -225,3 +221,7 @@ if __name__ == '__main__':
             write_output_file(data.documents, all_clusters, new_doc_ids, new_starts, new_ends, config['save_path'], doc_name,
                               topic_level=config.topic_level, corpus_level=not config.topic_level)
 
+
+
+if __name__ == '__main__':
+    cli_init()

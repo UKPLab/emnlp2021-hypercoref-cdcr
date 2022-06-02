@@ -115,3 +115,8 @@ coval/
 .idea/
 explore_eer_data.ipynb
 explore_data.ipynb
+logs/
+slurm/output/
+models/
+runs/
+venv_cu11/

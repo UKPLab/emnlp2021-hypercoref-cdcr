@@ -4,6 +4,7 @@ from sklearn.utils import shuffle
 from transformers import AutoTokenizer, AutoModel
 from tqdm import tqdm
 
+from corpus import Corpus
 from evaluator import Evaluation
 from models import SpanEmbedder, SpanScorer
 from model_utils import *
@@ -42,12 +43,12 @@ def train_topic_mention_extractor(span_repr, span_scorer, start_end, continuous_
 
 
 
-def get_span_data_from_topic(config, bert_model, data, topic_num):
-    docs_embeddings, docs_length = pad_and_read_bert(data.topics_bert_tokens[topic_num], bert_model)
+def get_span_data_from_topic(config, bert_model, data: Corpus, topic: str):
+    docs_embeddings, docs_length = pad_and_read_bert(data.bert_tokens[topic], bert_model)
     span_meta_data, span_embeddings, num_of_tokens = get_all_candidate_from_topic(
-        config, data, topic_num, docs_embeddings, docs_length)
-    doc_id, sentence_id, start, end = span_meta_data
-    labels = data.get_candidate_labels(doc_id, start, end)
+        config, data, topic, docs_embeddings, docs_length)
+    doc_ids, sentence_id, start, end = span_meta_data
+    labels = data.get_candidate_labels(topic, doc_ids, start, end)
     mention_labels = torch.zeros(labels.shape, device=device)
     mention_labels[labels.nonzero().squeeze(1)] = 1
 
@@ -74,8 +75,8 @@ if __name__ == '__main__':
 
     # read and tokenize data
     bert_tokenizer = AutoTokenizer.from_pretrained(config['bert_model'], add_special_tokens=True)
-    training_set = create_corpus(config, bert_tokenizer, 'train')
-    dev_set = create_corpus(config, bert_tokenizer, 'dev')
+    training_set = Corpus.create_corpus(config, bert_tokenizer, 'train')
+    dev_set = Corpus.create_corpus(config, bert_tokenizer, 'dev')
 
 
 
@@ -98,7 +99,7 @@ if __name__ == '__main__':
                                     '{}_span_scorer_{}'.format(config['mention_type'], config['exp_num']))
 
 
-    logger.info('Number of topics: {}'.format(len(training_set.topic_list)))
+    logger.info('Number of topics: {}'.format(len(training_set.docs_by_topic)))
     max_dev = (0, None)
 
     for epoch in range(config['epochs']):
@@ -107,13 +108,12 @@ if __name__ == '__main__':
         span_repr.train()
         span_scorer.train()
 
-        list_of_topics = shuffle(list(range(len(training_set.topic_list))))
+        list_of_topics = shuffle(list(training_set.docs_by_topic.keys()))
         accumulate_loss = 0
 
-        for topic_num in tqdm(list_of_topics):
-            topic = training_set.topic_list[topic_num]
+        for topic in tqdm(list_of_topics):
             span_meta_data, span_embeddings, mention_labels, num_of_tokens = \
-                get_span_data_from_topic(config, bert_model, training_set, topic_num)
+                get_span_data_from_topic(config, bert_model, training_set, topic)
 
             topic_start_end_embeddings, topic_continuous_embeddings, topic_width = span_embeddings
             epoch_loss = train_topic_mention_extractor(span_repr, span_scorer, topic_start_end_embeddings,
@@ -132,9 +132,9 @@ if __name__ == '__main__':
 
         all_scores, all_labels = [], []
         dev_num_of_tokens = 0
-        for topic_num, topic in enumerate(tqdm(dev_set.topic_list)):
+        for topic in tqdm(dev_set.docs_by_topic.keys()):
             span_meta_data, span_embeddings, mention_labels, num_of_tokens = \
-                get_span_data_from_topic(config, bert_model, dev_set, topic_num)
+                get_span_data_from_topic(config, bert_model, dev_set, topic)
 
             all_labels.extend(mention_labels)
             dev_num_of_tokens += num_of_tokens

@@ -1,0 +1,27 @@
+{
+  "gpu_num" : [0],
+
+  "bert_model": "roberta-large",
+  "hidden_layer": 1024,
+  "dropout": 0.3,
+  "with_mention_width": true,
+  "with_head_attention": true,
+  "embedding_dimension": 20,
+
+  "use_gold_mentions": true,
+  "mention_type": "events",
+  "split": "dev",
+  "subtopic": false,
+  "use_predicted_topics": false,
+  "segment_window": 512,
+
+  "topic_level": false,
+  "predicted_topics_path": "",
+
+  "log_path": "logs/tune/",
+  "data_folder": "data/gg/gvc/mentions",
+  "save_path": "models/sg/sg_bbc_25k/events/2/tune_on_best/gvc",
+  "model_path": "models/ss/ss_bbc_25k/events/2/best",
+
+  "linkage_type": "average"
+}

@@ -1,0 +1,30 @@
+{
+  "gpu_num" : [0],
+  "bert_model": "roberta-large",
+  "bert_hidden_size": 1024,
+  "hidden_layer": 1024,
+  "dropout": 0.3,
+  "with_mention_width": true,
+  "with_head_attention": true,
+  "embedding_dimension": 20,
+
+  "use_gold_mentions": true,
+  "mention_type": "events",
+  "training_method": "e2e",
+  "subtopic": false,
+  "use_predicted_topics": false,
+
+  "random_seed": 0,
+  "epochs": 100,
+  "learning_rate": 5e-5,
+  "weight_decay": 0,
+  "loss": "bce",
+  "optimizer": "adam",
+  "adam_epsilon": 1e-8,
+  "segment_window": 512,
+  "neg_samp": true,
+
+  "log_path": "logs/train/",
+  "data_folder": "data/ss/ss_bbc_25k/mentions",
+  "model_path": "models/ss/ss_bbc_25k/events"
+}

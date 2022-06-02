@@ -1,4 +1,3 @@
-import collections
 import logging
 import os
 import torch
@@ -7,37 +6,8 @@ import numpy as np
 import smtplib
 import torch.optim as optim
 from transformers import AdamW, get_linear_schedule_with_warmup
-import json
 from datetime import datetime
-import pickle
-
-from corpus import Corpus
-
-
-
-def create_corpus(config, tokenizer, split_name, is_training=True):
-    docs_path = os.path.join(config.data_folder, split_name + '.json')
-    mentions_path = os.path.join(config.data_folder,
-                                 split_name + '_{}.json'.format(config.mention_type))
-    with open(docs_path, 'r') as f:
-        documents = json.load(f)
-
-    mentions = []
-    if is_training or config.use_gold_mentions:
-        with open(mentions_path, 'r') as f:
-            mentions = json.load(f)
-
-    predicted_topics = None
-    if not is_training and config.use_predicted_topics:
-        with open(config.predicted_topics_path, 'rb') as f:
-            predicted_topics = pickle.load(f)
-
-    logging.info('Split - {}'.format(split_name))
-
-    return Corpus(documents, tokenizer, config.segment_window, mentions, subtopic=config.subtopic, predicted_topics=predicted_topics)
-
-
-
+import random
 
 
 def create_logger(config, create_file=True):
@@ -46,20 +16,26 @@ def create_logger(config, create_file=True):
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
     c_handler = logging.StreamHandler()
-    c_handler.setLevel(logging.INFO)
+    c_handler.setLevel(logging.DEBUG)
     c_handler.setFormatter(formatter)
     logger.addHandler(c_handler)
 
     if create_file:
         if not os.path.exists(config.log_path):
-            os.makedirs(config.log_path)
+            os.makedirs(config.log_path, exist_ok=True)
 
-        f_handler = logging.FileHandler(
-            os.path.join(config.log_path,'{}.txt'.format(datetime.now().strftime("%Y_%m_%d_%H_%M_%S"))), mode='w')
-        f_handler.setLevel(logging.INFO)
+        # append some random numbers to the logfile name; we have had instances where logfiles were overwritten because
+        # several jobs started at the same time
+        curr_date_str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        random_part = str(random.randint(0,10000))
+        log_filename = curr_date_str + "_" + random_part + ".txt"
+
+        f_handler = logging.FileHandler(os.path.join(config.log_path, log_filename), mode='w')
+        f_handler.setLevel(logging.DEBUG)
         f_handler.setFormatter(formatter)
         logger.addHandler(f_handler)
 
+    logger.setLevel(logging.DEBUG)
     logger.propagate = False
 
     return logger

@@ -1,7 +1,7 @@
 import collections
 import operator
 import os
-
+from typing import Optional
 
 
 def get_dict_map(predictions, doc_ids, starts, ends):
@@ -62,7 +62,7 @@ def output_conll(data, doc_word_map, doc_start_map, doc_end_map):
 
 
 
-def write_output_file(data, predictions, doc_ids, starts, ends, dir_path, doc_name, topic_level=True, corpus_level=True):
+def write_output_file(data, predictions, doc_ids, starts, ends, dir_path, doc_name, topic_level=True, corpus_level=True, corpus_level_doc_name: Optional[str] = None):
     doc_start_map, doc_end_map, doc_word_map = get_dict_map(predictions, doc_ids, starts, ends)
     corpus_level_tokens = output_conll(data, doc_word_map, doc_start_map, doc_end_map)
 
@@ -76,9 +76,8 @@ def write_output_file(data, predictions, doc_ids, starts, ends, dir_path, doc_na
 
 
     if corpus_level:
-        doc_name = '_'.join(doc_name.split('_')[:2])
         with open(corpus_level_path, 'w') as f:
-            f.write('#begin document {}\n'.format(doc_name))
+            f.write('#begin document {}\n'.format(corpus_level_doc_name or doc_name))
             for token in corpus_level_tokens:
                 f.write('\t'.join([str(x) for x in token]) + '\n')
             f.write('#end document')

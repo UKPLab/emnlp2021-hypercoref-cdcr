@@ -3,6 +3,8 @@ import torch
 from itertools import compress
 
 
+from corpus import Corpus
+
 
 def pad_and_read_bert(bert_token_ids, bert_model):
     length = np.array([len(d) for d in bert_token_ids])
@@ -64,17 +66,17 @@ def get_all_token_embedding(embedding, start, end):
 
 
 
-def get_all_candidate_from_topic(config, data, topic_num, docs_embeddings, docs_length, is_training=True):
+def get_all_candidate_from_topic(config, data: Corpus, topic: str, docs_embeddings, docs_length, is_training=True):
     span_doc, span_sentence, span_origin_start, span_origin_end = [], [], [], []
     topic_start_end_embeddings, topic_continuous_embeddings, topic_width = [], [], []
     num_tokens = 0
 
-    doc_names = data.topics_list_of_docs[topic_num]
+    doc_names = data.list_of_docs[topic]
 
     for i in range(len(doc_names)):
         doc_id = doc_names[i]
-        original_tokens = data.topics_origin_tokens[topic_num][i]
-        bert_start_end = data.topics_start_end_bert[topic_num][i]
+        original_tokens = data.origin_tokens[topic][i]
+        bert_start_end = data.start_end_bert[topic][i]
         if is_training:  # Filter only the validated sentences according to Cybulska setup
             filt = [x[-1] for x in original_tokens]
             bert_start_end = bert_start_end[filt]

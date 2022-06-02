@@ -1,0 +1,32 @@
+{
+  "gpu_num" : [0],
+
+  "bert_model": "roberta-large",
+  "hidden_layer": 1024,
+  "dropout": 0.3,
+  "with_mention_width": true,
+  "with_head_attention": true,
+  "embedding_dimension": 20,
+
+  "use_gold_mentions": true,
+  "mention_type": "events",
+  "split": "test",
+  "subtopic": false,
+  "use_predicted_topics": true,
+  "segment_window": 512,
+
+  "topic_level": false,
+  "predicted_topics_path": "data/gg/ecbp/ecbp_test_01b59f55_2020-08-28_14-26-24_gold_transitive_closure_doc_clustering_barhom_format.pkl",
+
+  "log_path": "logs/predict/",
+  "data_folder": "data/gg/ecbp/mentions",
+  "save_path": "models/ss/ss_abc_25k/events/ecbp/closure",
+  "model_path": "models/ss/ss_abc_25k/events",
+
+  "linkage_type": "average",
+  "best_hyperparams": {
+    "0":[9,0.70],
+    "1":[0,0.70],
+    "2":[10,0.70]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "gpu_num" : [0],
+
+  "bert_model": "roberta-large",
+  "hidden_layer": 1024,
+  "dropout": 0.3,
+  "with_mention_width": true,
+  "with_head_attention": true,
+  "embedding_dimension": 20,
+
+  "use_gold_mentions": true,
+  "mention_type": "events",
+  "split": "test",
+  "subtopic": false,
+  "use_predicted_topics": true,
+  "segment_window": 512,
+
+  "topic_level": false,
+  "predicted_topics_path": "data/gg/gvc/gvc_test_109d733b_2020-09-01_19-23-04_gold_transitive_closure_doc_clustering.pkl",
+
+  "log_path": "logs/predict/",
+  "data_folder": "data/gg/gvc/mentions",
+  "save_path": "models/gg/fcct/events/fcct_on_gvc/closure",
+  "model_path": "models/gg/fcct/events",
+
+  "linkage_type": "average",
+  "best_hyperparams": {
+    "0":[8,0.65],
+    "1":[8,0.60],
+    "2":[12,0.60]
+  }
+}

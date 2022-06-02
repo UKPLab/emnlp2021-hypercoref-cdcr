@@ -192,7 +192,7 @@ def get_all_docs(data_path, validated_sentences):
                 dev_event_mentions += event_mentions
                 dev_entity_mentions += entity_mentions
 
-            else:
+            elif topic in TEST:
                 test_docs.update(topic_docs)
                 test_event_mentions += event_mentions
                 test_entity_mentions += entity_mentions
@@ -229,12 +229,11 @@ def get_list_annotated_sentences(annotated_sentences):
 
 
 def save_gold_conll_files(documents, mentions, clusters, dir_path, doc_name):
-    non_singletons = {cluster: ms for cluster, ms in clusters.items() if len(ms) > 1}
     doc_ids = [m['doc_id'] for m in mentions]
     starts = [min(m['tokens_ids']) for m in mentions]
     ends = [max(m['tokens_ids']) for m in mentions]
 
-    write_output_file(documents, non_singletons, doc_ids, starts, ends, dir_path, doc_name)
+    write_output_file(documents, clusters, doc_ids, starts, ends, dir_path, doc_name, corpus_level_doc_name=doc_name)
 
 
 if __name__ == '__main__':

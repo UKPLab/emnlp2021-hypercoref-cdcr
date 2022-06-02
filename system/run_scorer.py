@@ -18,6 +18,7 @@ def main():
                        and 'removIe_singleton' not in sys.argv)
     min_span = False
 
+    # TODO MB: why is the gold data used as sys file here, and the predictions as key file!?!
     path = sys.argv[1]
     mention_type = sys.argv[2]
     sys_file = 'data/ecb/gold/dev_{}_topic_level.conll'.format(mention_type)
